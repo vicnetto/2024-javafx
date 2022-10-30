@@ -15,6 +15,8 @@ public class MainView {
         BorderPane borderPane = new BorderPane();
 
         borderPane.setBottom(gameInformationView.getView());
+        borderPane.setCenter(boardView.getView());
+        borderPane.setTop(menuView.getView());
 
         borderPane.setStyle("-fx-background-color: #6272a4");
 
