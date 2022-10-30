@@ -1,8 +1,8 @@
 package com.vicnetto.javafx2048.constant;
 
 public enum WindowSize {
-    WIDTH(600),
-    LENGTH(600);
+    WIDTH(500),
+    LENGTH(650);
 
     private final int value;
 
