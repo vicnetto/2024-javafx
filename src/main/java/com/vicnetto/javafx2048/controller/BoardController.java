@@ -2,6 +2,7 @@ package com.vicnetto.javafx2048.controller;
 
 import com.vicnetto.javafx2048.constant.GameParameter;
 import com.vicnetto.javafx2048.model.Board;
+import com.vicnetto.javafx2048.model.Direction;
 import com.vicnetto.javafx2048.view.BoardView;
 
 public class BoardController {
@@ -21,9 +22,6 @@ public class BoardController {
             }
         }
 
-        board.move(true, false);
-//        board.downMove();
-
-        System.out.println("Hello");
+        board.move(Direction.UP);
     }
 }
