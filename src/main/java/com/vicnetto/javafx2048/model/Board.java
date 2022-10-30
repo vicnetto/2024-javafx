@@ -5,7 +5,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.Arrays;
-import java.util.function.IntFunction;
 
 import static com.vicnetto.javafx2048.constant.GameParameter.POSSIBLE_BOARD_SIZES;
 
@@ -34,30 +33,25 @@ public class Board implements Watcher {
                 POSSIBLE_BOARD_SIZES[newBoardSize] : POSSIBLE_BOARD_SIZES[0]);
     }
 
-    public void move(boolean isVertical, boolean leftToRight) {
+    public void move(Direction direction) {
 
-        move(isVertical, leftToRight, true);
+        move(direction, true);
 
         for (int i = 0; i < (boardSize.get() / 2) - 1; i++)
-            move(isVertical, leftToRight, false);
+            move(direction, false);
     }
 
-    private void move(boolean isVertical, boolean leftToRight, boolean shouldCombine) {
+    private void move(Direction direction, boolean shouldCombine) {
 
-        int start = leftToRight ? 0 : boardSize.get() - 1;
-        int end = leftToRight ? boardSize.get() - 1 : 0;
+        MoveDirection moveDirection = new MoveDirection(boardSize.get(), direction);
 
-        IntFunction<Integer> next = index -> leftToRight ? index + 1 : index - 1;
-        IntFunction<Boolean> rowStopCondition = index -> leftToRight ? index <= end : index >= 0;
-        IntFunction<Boolean> columnStopCondition = index -> leftToRight ? index < end : index > 0;
-
-        for (int i = start; isVertical ? columnStopCondition.apply(i) : rowStopCondition.apply(i); i = next.apply(i)) {
-            for (int j = start; isVertical ? rowStopCondition.apply(j) : columnStopCondition.apply(j); j = next.apply(j)) {
+        for (int i = moveDirection.start; moveDirection.rowStopCondition(i); i = moveDirection.next(i)) {
+            for (int j = moveDirection.start; moveDirection.columnStopCondition(j); j = moveDirection.next(j)) {
                 if (board[i][j].get() == 0)
                     continue;
 
-                int ii = isVertical ? next.apply(i) : i;
-                int jj = isVertical ? j : next.apply(j);
+                int ii = moveDirection.newRow(i);
+                int jj = moveDirection.newColumn(j);
 
                 if (shouldCombine && board[i][j].get() == board[ii][jj].get()) {
                     board[ii][jj].set(board[i][j].get() * 2);
