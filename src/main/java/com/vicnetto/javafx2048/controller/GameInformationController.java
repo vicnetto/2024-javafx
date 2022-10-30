@@ -19,4 +19,8 @@ public class GameInformationController {
         gameInformationView.getAttemptsText().textProperty().bind(gameInformation.attemptsProperty().asString());
         gameInformationView.getBestScoreText().textProperty().bind(gameInformation.bestScoreProperty().asString());
     }
+
+    public GameInformation getGameInformation() {
+        return gameInformation;
+    }
 }

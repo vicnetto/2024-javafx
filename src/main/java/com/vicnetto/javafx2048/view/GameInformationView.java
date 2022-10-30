@@ -1,5 +1,6 @@
 package com.vicnetto.javafx2048.view;
 
+import com.vicnetto.javafx2048.constant.ColorPalette;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,17 +11,20 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 
+import static com.vicnetto.javafx2048.constant.TextStyle.DATA_TEXT_STYLE;
+import static com.vicnetto.javafx2048.constant.TextStyle.LABEL_TEXT_STYLE;
+
 public class GameInformationView {
 
-    private Label scoreText = new Label("");
+    private final Label scoreText = new Label("");
 
-    private Label winsText = new Label("");
+    private final Label winsText = new Label("");
 
-    private Label attemptsText = new Label("");
+    private final Label attemptsText = new Label("");
 
-    private Label bestScoreText = new Label("");
+    private final Label bestScoreText = new Label("");
 
-    private Parent view;
+    private final Parent view;
 
     public GameInformationView() {
         view = createView();
@@ -46,7 +50,7 @@ public class GameInformationView {
     private Node gameTitle() {
         Label title = new Label("2048");
         title.setStyle("-fx-font: 50 arial; -fx-font-weight: bold");
-        title.setTextFill(Paint.valueOf("#ffb86c"));
+        title.setTextFill(Paint.valueOf(ColorPalette.ORANGE));
 
         return title;
     }
@@ -55,17 +59,17 @@ public class GameInformationView {
         GridPane gridPane = new GridPane();
 
         Label score = new Label("Score: ");
-        score.setStyle("-fx-font: 15 arial; -fx-font-weight: bold");
-        scoreText.setStyle("-fx-font: 15 arial;");
+        score.setStyle(LABEL_TEXT_STYLE);
+        scoreText.setStyle(DATA_TEXT_STYLE);
         Label wins = new Label("Wins: ");
-        wins.setStyle("-fx-font: 15 arial; -fx-font-weight: bold");
-        winsText.setStyle("-fx-font: 15 arial;");
+        wins.setStyle(LABEL_TEXT_STYLE);
+        winsText.setStyle(DATA_TEXT_STYLE);
         Label attempts = new Label("Attempts: ");
-        attempts.setStyle("-fx-font: 15 arial; -fx-font-weight: bold");
-        attemptsText.setStyle("-fx-font: 15 arial;");
+        attempts.setStyle(LABEL_TEXT_STYLE);
+        attemptsText.setStyle(DATA_TEXT_STYLE);
         Label bestScore = new Label("Best Score: ");
-        bestScore.setStyle("-fx-font: 15 arial; -fx-font-weight: bold");
-        bestScoreText.setStyle("-fx-font: 15 arial;");
+        bestScore.setStyle(LABEL_TEXT_STYLE);
+        bestScoreText.setStyle(DATA_TEXT_STYLE);
 
         GridPane.setRowIndex(score, 0);
         GridPane.setRowIndex(wins, 1);
