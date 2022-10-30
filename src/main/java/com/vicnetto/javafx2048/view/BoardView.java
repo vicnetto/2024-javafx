@@ -52,7 +52,7 @@ public class BoardView {
 
             for (int j = 0; j < boardSize; j++) {
                 Rectangle rectangle = new Rectangle();
-                rectangle.setFill(Paint.valueOf(ColorPalette.LIGHT_GREY));
+                rectangle.setFill(Paint.valueOf(ColorPalette.WHITE));
 
                 Label label = new Label("1");
                 label.setTextFill(Paint.valueOf(ColorPalette.LIGHT_GREY));

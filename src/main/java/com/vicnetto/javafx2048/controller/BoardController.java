@@ -20,5 +20,10 @@ public class BoardController {
                  boardView.getLabels().get(i).get(j).textProperty().bind((board.getBoard()[i][j]).asString());
             }
         }
+
+        board.move(true, false);
+//        board.downMove();
+
+        System.out.println("Hello");
     }
 }
