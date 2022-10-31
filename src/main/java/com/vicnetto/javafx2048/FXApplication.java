@@ -1,5 +1,6 @@
 package com.vicnetto.javafx2048;
 
+import com.vicnetto.javafx2048.builder.SceneBuilder;
 import com.vicnetto.javafx2048.constant.WindowSize;
 import com.vicnetto.javafx2048.controller.BoardController;
 import com.vicnetto.javafx2048.controller.GameInformationController;
@@ -10,7 +11,9 @@ import com.vicnetto.javafx2048.view.GameInformationView;
 import com.vicnetto.javafx2048.view.MainView;
 import com.vicnetto.javafx2048.view.MenuView;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class FXApplication extends Application {
@@ -26,9 +29,8 @@ public class FXApplication extends Application {
         BoardController boardController = new BoardController(boardView);
         MenuController menuController = new MenuController(menuView, new Board(4), gameInformationController.getGameInformation());
 
-        Scene scene = new Scene(mainView.getView(), WindowSize.WIDTH.getValue(), WindowSize.LENGTH.getValue());
         stage.setTitle("2024 - JavaFX");
-        stage.setScene(scene);
+        stage.setScene(SceneBuilder.buildScene(mainView, gameInformationController, boardController, menuController));
         stage.show();
     }
 

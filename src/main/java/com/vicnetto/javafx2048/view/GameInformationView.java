@@ -50,7 +50,7 @@ public class GameInformationView {
     private Node gameTitle() {
         Label title = new Label("2048");
         title.setStyle("-fx-font: 50 arial; -fx-font-weight: bold");
-        title.setTextFill(Paint.valueOf(ColorPalette.ORANGE));
+        title.setTextFill(Paint.valueOf(ColorPalette.ORANGE_SPACE_DEBRIS));
 
         return title;
     }
