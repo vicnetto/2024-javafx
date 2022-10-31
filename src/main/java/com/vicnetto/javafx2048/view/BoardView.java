@@ -1,10 +1,10 @@
 package com.vicnetto.javafx2048.view;
 
+import com.vicnetto.javafx2048.constant.CellColor;
 import com.vicnetto.javafx2048.constant.ColorPalette;
 import com.vicnetto.javafx2048.constant.GameParameter;
 import com.vicnetto.javafx2048.constant.UIParameter;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -70,6 +70,14 @@ public class BoardView {
 
                 GridPane.setConstraints(stackPane, j, i);
                 gridPane.getChildren().add(stackPane);
+            }
+        }
+    }
+
+    public void updateRectangleColors() {
+        for (int i = 0; i < rectangles.size(); i++) {
+            for (int j = 0; j < rectangles.size(); j++) {
+                rectangles.get(i).get(j).setFill(CellColor.getColorAccordingToNumber(Integer.parseInt(labels.get(i).get(j).getText())));
             }
         }
     }
