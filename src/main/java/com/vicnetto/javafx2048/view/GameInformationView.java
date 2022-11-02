@@ -10,12 +10,14 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 
 import static com.vicnetto.javafx2048.constant.TextStyle.DATA_TEXT_STYLE;
 import static com.vicnetto.javafx2048.constant.TextStyle.LABEL_TEXT_STYLE;
 
 public class GameInformationView {
 
+    private final Text message = new Text("");
     private final Label scoreText = new Label("");
 
     private final Label winsText = new Label("");
@@ -35,11 +37,11 @@ public class GameInformationView {
         hBox.setPadding(new Insets(10));
 
         HBox title = new HBox(gameTitle());
-        title.setAlignment(Pos.CENTER);
+        title.setAlignment(Pos.CENTER_RIGHT);
         HBox.setHgrow(title, Priority.ALWAYS);
 
         HBox data = new HBox(gameData());
-        data.setAlignment(Pos.CENTER);
+        data.setAlignment(Pos.CENTER_RIGHT);
         HBox.setHgrow(data, Priority.ALWAYS);
 
         hBox.getChildren().addAll(title, data);
@@ -48,11 +50,41 @@ public class GameInformationView {
     }
 
     private Node gameTitle() {
-        Label title = new Label("2048");
-        title.setStyle("-fx-font: 50 arial; -fx-font-weight: bold");
-        title.setTextFill(Paint.valueOf(ColorPalette.ORANGE_SPACE_DEBRIS));
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(10);
 
-        return title;
+        Text text = new Text("2048");
+        text.setStyle("-fx-font: 60 arial; -fx-font-weight: bold");
+        text.setFill(Paint.valueOf(ColorPalette.RED_SUPER_GIANT));
+        text.setStrokeWidth(2);
+        text.setStroke(Paint.valueOf(ColorPalette.ORANGE_SPACE_DEBRIS));
+
+        VBox statusVBox = new VBox();
+        statusVBox.setAlignment(Pos.CENTER);
+        Text status = new Text("STATUS:");
+        status.setStyle("-fx-font: 14 arial; -fx-font-weight: bold");
+        status.setFill(Paint.valueOf(ColorPalette.WHITE));
+        message.setText("Goal not yet achieved!");
+        message.setStyle("-fx-font: 14 arial; -fx-font-weight: bold");
+        message.setFill(Paint.valueOf(ColorPalette.VERY_LIGHT_GREY));
+        statusVBox.getChildren().addAll(status, message);
+
+        vBox.getChildren().addAll(text, statusVBox);
+
+        return vBox;
+    }
+
+    public void setGameWinnerMessage() {
+        message.setText("You won! Keep going!");
+        message.setStyle("-fx-font: 14 arial; -fx-font-weight: bold");
+        message.setFill(Paint.valueOf(ColorPalette.GREEN_PLANETARIUM));
+    }
+
+    public void setGameLostMessage() {
+        message.setText("You lost! Try again!");
+        message.setStyle("-fx-font: 14 arial; -fx-font-weight: bold");
+        message.setFill(Paint.valueOf(ColorPalette.RED_SUPER_GIANT));
     }
 
     private Node gameData() {
@@ -90,8 +122,8 @@ public class GameInformationView {
                 new RowConstraints(10, 30, 100, Priority.SOMETIMES, VPos.CENTER, true)
         );
         gridPane.getColumnConstraints().addAll(
-                new ColumnConstraints(10, 150, 300, Priority.SOMETIMES, HPos.RIGHT, true),
-                new ColumnConstraints(10, 20, 300, Priority.SOMETIMES, HPos.LEFT, true)
+                new ColumnConstraints(10, 120, 300, Priority.SOMETIMES, HPos.RIGHT, true),
+                new ColumnConstraints(10, 70, 300, Priority.SOMETIMES, HPos.LEFT, true)
         );
 
         return gridPane;
