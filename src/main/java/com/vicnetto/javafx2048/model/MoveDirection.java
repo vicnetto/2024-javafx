@@ -20,54 +20,54 @@ public class MoveDirection {
 
     public boolean columnStopCondition(int index) {
         return switch (direction) {
-            case RIGHT -> index < end;
-            case LEFT -> index > 0;
-            case DOWN -> index <= end;
-            case UP -> index >= 0;
+            case LEFT -> index < end;
+            case RIGHT -> index > 0;
+            case UP -> index <= end;
+            case DOWN -> index >= 0;
         };
     }
 
     public boolean rowStopCondition(int index) {
         return switch (direction) {
-            case RIGHT -> index <= end;
-            case LEFT -> index >= 0;
-            case DOWN -> index < end;
-            case UP -> index > 0;
+            case LEFT -> index <= end;
+            case RIGHT -> index >= 0;
+            case UP -> index < end;
+            case DOWN -> index > 0;
         };
     }
 
     public int next(int index) {
         return switch (direction) {
-            case RIGHT, DOWN -> index + 1;
-            case LEFT, UP -> index - 1;
+            case LEFT, UP -> index + 1;
+            case RIGHT, DOWN -> index - 1;
         };
     }
 
     public int newRow(int index) {
         return switch (direction) {
-            case RIGHT, LEFT -> index;
-            case UP, DOWN -> next(index);
+            case LEFT, RIGHT -> index;
+            case DOWN, UP -> next(index);
         };
     }
 
     public int newColumn(int index) {
         return switch (direction) {
-            case RIGHT, LEFT -> next(index);
-            case UP, DOWN -> index;
+            case LEFT, RIGHT -> next(index);
+            case DOWN, UP -> index;
         };
     }
 
     private int calculateStart() {
         return switch (direction) {
-            case RIGHT, DOWN -> 0;
-            case LEFT, UP -> boardSize - 1;
+            case LEFT, UP -> 0;
+            case RIGHT, DOWN -> boardSize - 1;
         };
     }
 
     private int calculateEnd() {
         return switch (direction) {
-            case RIGHT, DOWN -> boardSize - 1;
-            case LEFT, UP -> 0;
+            case LEFT, UP -> boardSize - 1;
+            case RIGHT, DOWN -> 0;
         };
     }
 

@@ -24,4 +24,5 @@ public class ColorPalette {
 
     public static final String DARK_GREY = "#44475a";
     public static final String LIGHT_GREY = "#75788a";
+    public static final String VERY_LIGHT_GREY = "#c2c4d1";
 }

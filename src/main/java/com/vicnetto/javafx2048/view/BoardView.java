@@ -2,7 +2,6 @@ package com.vicnetto.javafx2048.view;
 
 import com.vicnetto.javafx2048.constant.CellColor;
 import com.vicnetto.javafx2048.constant.ColorPalette;
-import com.vicnetto.javafx2048.constant.GameParameter;
 import com.vicnetto.javafx2048.constant.UIParameter;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -17,24 +16,24 @@ import java.util.List;
 
 public class BoardView {
 
-    private List<List<Label>> labels = new ArrayList<>();
+    private final List<List<Label>> labels = new ArrayList<>();
 
-    private List<List<Rectangle>> rectangles = new ArrayList<>();
+    private final List<List<Rectangle>> rectangles = new ArrayList<>();
 
-    private Parent view;
+    private final Parent view;
 
-    public BoardView() {
-        view = createView();
+    public BoardView(int boardSize) {
+        view = createView(boardSize);
     }
 
-    private StackPane createView() {
+    public StackPane createView(int boardSize) {
         StackPane stackPane = new StackPane();
         Rectangle rectangle = new Rectangle(UIParameter.BOARD_BORDER_UI_SIZE, UIParameter.BOARD_BORDER_UI_SIZE);
         rectangle.setFill(Paint.valueOf(ColorPalette.DARK_GREY));
 
         GridPane gridPane = new GridPane();
 
-        createBoard(gridPane, GameParameter.DEFAULT_BOARD_SIZE);
+        createBoard(gridPane, boardSize);
 
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(UIParameter.SPACE_BETWEEN_CELLS);
@@ -46,6 +45,9 @@ public class BoardView {
     }
 
     private void createBoard(GridPane gridPane, int boardSize) {
+        rectangles.clear();
+        labels.clear();
+
         for (int i = 0; i < boardSize; i++) {
             rectangles.add(new ArrayList<>());
             labels.add(new ArrayList<>());
@@ -80,10 +82,6 @@ public class BoardView {
                 rectangles.get(i).get(j).setFill(CellColor.getColorAccordingToNumber(Integer.parseInt(labels.get(i).get(j).getText())));
             }
         }
-    }
-
-    private StackPane changeView() {
-        return null;
     }
 
     public Parent getView() {

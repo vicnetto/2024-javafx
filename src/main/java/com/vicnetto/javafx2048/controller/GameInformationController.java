@@ -7,12 +7,12 @@ public class GameInformationController {
 
     private GameInformation gameInformation;
 
-    public GameInformationController(GameInformationView gameInformationView) {
-        setView(gameInformationView);
+    public GameInformationController(GameInformationView gameInformationView, GameInformation gameInformation) {
+        setView(gameInformationView, gameInformation);
     }
 
-    private void setView(GameInformationView gameInformationView) {
-        gameInformation = new GameInformation();
+    private void setView(GameInformationView gameInformationView, GameInformation gameInformation) {
+        this.gameInformation = gameInformation;
 
         gameInformationView.getScoreText().textProperty().bind(gameInformation.scoreProperty().asString());
         gameInformationView.getWinsText().textProperty().bind(gameInformation.winsProperty().asString());

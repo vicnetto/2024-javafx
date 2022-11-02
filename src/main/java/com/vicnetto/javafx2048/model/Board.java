@@ -6,56 +6,57 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.vicnetto.javafx2048.constant.GameParameter.POSSIBLE_BOARD_SIZES;
-
 public class Board implements Watcher {
 
-    private IntegerProperty boardSize;
+    private final IntegerProperty boardSize;
 
     private IntegerProperty[][] board;
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
 
     public Board(Integer boardSize) {
         this.boardSize = new SimpleIntegerProperty(boardSize);
 
-        board = new IntegerProperty[boardSize][boardSize];
+        initializeBoardWithZeros();
+    }
 
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
+    private void initializeBoardWithZeros() {
+        board = new IntegerProperty[boardSize.get()][boardSize.get()];
+
+        for (int i = 0; i < boardSize.get(); i++) {
+            for (int j = 0; j < boardSize.get(); j++) {
                 board[i][j] = new SimpleIntegerProperty(0);
             }
         }
     }
 
-    public void setNewBoardSize() {
-        int newBoardSize = Arrays.binarySearch(POSSIBLE_BOARD_SIZES, boardSize.get()) + 1;
-
-        boardSize.set(newBoardSize < POSSIBLE_BOARD_SIZES.length ?
-                POSSIBLE_BOARD_SIZES[newBoardSize] : POSSIBLE_BOARD_SIZES[0]);
-    }
-
     public boolean move(Direction direction) {
 
+        int[][] boardBeforeMove = new int[boardSize.get()][boardSize.get()];
         List<Pair<Integer, Integer>> emptySpaces = new ArrayList<>();
+
+        for (int i = 0; i < boardSize.get(); i++) {
+            for (int j = 0; j < boardSize.get(); j++) {
+                boardBeforeMove[i][j] = board[i][j].get();
+            }
+        }
+
+        // Remove gaps from the board.
+         for (int i = 0; i < boardSize.get() - 1; i++)
+             move(direction, false);
 
         // Make the movement according to the direction.
         move(direction, true);
 
-        // Remove gaps from the board.
-        for (int i = 0; i < (boardSize.get() / 2) - 1; i++)
-            move(direction, false);
-
         // Verify if there are possible movements, or the game is over.
         boolean isEndGame = verifyPossibleMovements(emptySpaces);
 
-        if (!emptySpaces.isEmpty())
-            enterTwoInRandomPosition(emptySpaces, false);
+        if (!verifyIfBoardIsTheSameAfterMove(boardBeforeMove) && !emptySpaces.isEmpty())
+            enterTwoInRandomPosition(emptySpaces);
 
         return isEndGame;
     }
@@ -78,22 +79,21 @@ public class Board implements Watcher {
 
         for (int i = moveDirection.start; moveDirection.rowStopCondition(i); i = moveDirection.next(i)) {
             for (int j = moveDirection.start; moveDirection.columnStopCondition(j); j = moveDirection.next(j)) {
-                if (board[i][j].get() == 0)
-                    continue;
 
                 int ii = moveDirection.newRow(i);
                 int jj = moveDirection.newColumn(j);
 
                 // If the next number is equal, and if the cells must be combined, sum and reallocate to the next position.
                 if (shouldCombine && board[i][j].get() == board[ii][jj].get()) {
-                    board[ii][jj].set(board[i][j].get() * 2);
-                    board[i][j].set(0);
+                    board[i][j].set(board[ii][jj].get() * 2);
+                    board[ii][jj].set(0);
+                    move(direction, false);
                 }
 
                 // If the next value is a zero, swap.
-                if (board[ii][jj].get() == 0) {
-                    board[ii][jj].set(board[i][j].get());
-                    board[i][j].set(0);
+                if (board[i][j].get() == 0 && board[ii][jj].get() != 0) {
+                    board[i][j].set(board[ii][jj].get());
+                    board[ii][jj].set(0);
                 }
             }
         }
@@ -103,7 +103,7 @@ public class Board implements Watcher {
      * @return -> True if there is at least one available move, and false if there is none.
      */
     private boolean verifyPossibleMovements(List<Pair<Integer, Integer>> emptySpaces) {
-        boolean isPossibleToContinue = false;
+        int stuckNumbers = 0;
         emptySpaces.clear();
 
         for (int i = 0; i < boardSize.get(); i++) {
@@ -113,23 +113,35 @@ public class Board implements Watcher {
                 if (currentNumber == 0)
                     emptySpaces.add(new Pair<>(i, j));
 
-                if (!isPossibleToContinue && checkNeighbors(i, j, currentNumber))
-                    isPossibleToContinue = true;
+                if (currentNumber != 0 && !checkNeighbors(i, j, currentNumber))
+                    stuckNumbers++;
             }
         }
 
-        return isPossibleToContinue;
+        return stuckNumbers != (boardSize.get() * boardSize.get());
     }
 
-    public void enterTwoInRandomPosition(List<Pair<Integer, Integer>> emptyEspaces, boolean isFirstTwo) {
-        if (isFirstTwo) {
-            board[random.nextInt(boardSize.get() - 1)][random.nextInt(boardSize.get() - 1)].set(2);
-            return;
-        }
-
+    public void enterTwoInRandomPosition(List<Pair<Integer, Integer>> emptyEspaces) {
         int randomPosition = emptyEspaces.size() == 1 ? 0 : random.nextInt(emptyEspaces.size() - 1);
         Pair<Integer, Integer> position = emptyEspaces.get(randomPosition);
         board[position.getKey()][position.getValue()].set(2);
+    }
+
+    public void initializeWithTwos() {
+        int i = random.nextInt(boardSize.get() - 1);
+        int j = random.nextInt(boardSize.get() - 1);
+
+        board[i][j].set(2);
+
+        int ii;
+        int jj;
+
+        do {
+            ii = random.nextInt(boardSize.get() - 1);
+            jj = random.nextInt(boardSize.get() - 1);
+
+            board[ii][jj].set(2);
+        } while (ii == i && jj == j);
     }
 
     private boolean checkNeighbors(int i, int j, int currentNumber) {
@@ -148,20 +160,19 @@ public class Board implements Watcher {
         return false;
     }
 
+    private boolean verifyIfBoardIsTheSameAfterMove(int[][] board) {
+        for (int i = 0; i < boardSize.get(); i++) {
+            for (int j = 0; j < boardSize.get(); j++) {
+                if (board[i][j] != this.board[i][j].get())
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
     public int getBoardSize() {
         return boardSize.get();
-    }
-
-    public IntegerProperty boardSizeProperty() {
-        return boardSize;
-    }
-
-    public void setBoardSize(int boardSize) {
-        this.boardSize.set(boardSize);
-
-        // After changing the board size, the board needs to be recreated.
-
-        board = new IntegerProperty[boardSize][boardSize];
     }
 
     public IntegerProperty[][] getBoard() {
@@ -172,8 +183,10 @@ public class Board implements Watcher {
     public void newGame() {
         for (int i = 0; i < boardSize.get(); i++) {
             for (int j = 0; j < boardSize.get(); j++) {
-                board[i][j] = new SimpleIntegerProperty(0);
+                board[i][j].set(0);
             }
         }
+
+        initializeWithTwos();
     }
 }
