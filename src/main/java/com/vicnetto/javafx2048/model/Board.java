@@ -128,8 +128,8 @@ public class Board implements Watcher {
     }
 
     public void initializeWithTwos() {
-        int i = random.nextInt(boardSize.get() - 1);
-        int j = random.nextInt(boardSize.get() - 1);
+        int i = random.nextInt(boardSize.get());
+        int j = random.nextInt(boardSize.get());
 
         board[i][j].set(2);
 
@@ -137,8 +137,8 @@ public class Board implements Watcher {
         int jj;
 
         do {
-            ii = random.nextInt(boardSize.get() - 1);
-            jj = random.nextInt(boardSize.get() - 1);
+            ii = random.nextInt(boardSize.get());
+            jj = random.nextInt(boardSize.get());
 
             board[ii][jj].set(2);
         } while (ii == i && jj == j);
